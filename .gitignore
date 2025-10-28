@@ -1,0 +1,32 @@
+# --- Python & environment ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Build and cache
+build/
+dist/
+*.egg-info/
+
+# Data and logs
+logs/
+data/
+*.tmp
+*.bak
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

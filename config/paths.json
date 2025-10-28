@@ -1,0 +1,16 @@
+{
+  "whatsapp": [
+    "C:\\Users\\New Select Com\\AppData\\Local\\WhatsApp\\WhatsApp.exe",
+    "C:\\Program Files\\WhatsApp\\WhatsApp.exe",
+    "C:\\Program Files (x86)\\WhatsApp\\WhatsApp.exe"
+  ],
+  "chrome": [
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
+    "C:\\Users\\New Select Com\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
+  ],
+  "edge": [
+    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+  ]
+}

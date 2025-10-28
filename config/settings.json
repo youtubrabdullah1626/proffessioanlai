@@ -1,0 +1,7 @@
+{
+	"wakeWords": ["hey don", "don"],
+	"language": "roman-urdu-english",
+	"similarityThreshold": 0.82,
+	"chromeProfilePath": "C:/Users/New Select Com/AppData/Local/Google/Chrome/User Data/Default",
+	"tts": {"engine": "pyttsx3", "rate": 180, "voice": "default"}
+}
