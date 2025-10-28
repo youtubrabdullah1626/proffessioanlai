@@ -65,12 +65,14 @@ def ensure_first_launch() -> Dict[str, bool]:
 		logger.info(f"Wrote system apps map: {SYSTEM_APPS_JSON}")
 
 	# Scanner-generated paths.json
-	try:
-		paths_map = scan_app_paths()
-		with open(PATHS_JSON, "w", encoding="utf-8") as f:
-			json.dump(paths_map, f, indent=2)
-			logger.info(f"Wrote app paths map: {PATHS_JSON}")
-	except Exception as e:
-		logger.error(f"Failed to write {PATHS_JSON}: {e}")
+	paths_map = scan_app_paths()
+	# Fallback for WhatsApp path from env if missing
+	wa_env = os.getenv("WHATSAPP_PROFILE_PATH")
+	if wa_env and "whatsapp" not in (k.lower() for k in paths_map.keys()):
+		paths_map["whatsapp"] = wa_env
+		logger.info("[INFO] Added whatsapp path from .env")
+	with open(PATHS_JSON, "w", encoding="utf-8") as f:
+		json.dump(paths_map, f, indent=2)
+		logger.info(f"Wrote app paths map: {PATHS_JSON}")
 
 	return availability

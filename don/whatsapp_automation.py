@@ -54,6 +54,10 @@ class WhatsAppAutomation:
 		return "web"
 
 	def _preview_confirmation(self, message: str) -> bool:
+		if is_simulation_mode():
+			# Auto-approve in simulation mode for testability
+			logger.info("[SIMULATION] Preview auto-approved.")
+			return True
 		preview = message[:120]
 		return require_confirmation(f"send WhatsApp message preview: {preview}")
 

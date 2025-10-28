@@ -4,6 +4,7 @@ import time
 from typing import Dict, List, Optional
 
 import psutil
+import json
 
 try:
 	import win32gui  # type: ignore
@@ -39,10 +40,23 @@ def _expand_candidates(cands: List[str]) -> List[str]:
 	return [os.path.expandvars(p).replace("/", os.sep) for p in cands]
 
 
-def discover_app(app_key: str) -> Optional[str]:
-	"""Return the first existing executable path for app_key from SYSTEM_APPS."""
+def _read_paths_json() -> Dict[str, str]:
 	try:
-		cands = _expand_candidates(SYSTEM_APPS.get(app_key.lower(), []))
+		with open(os.path.join("config", "paths.json"), "r", encoding="utf-8") as f:
+			data = json.load(f)
+			return {str(k).lower(): str(v) for k, v in data.items()}
+	except Exception:
+		return {}
+
+
+def discover_app(app_key: str) -> Optional[str]:
+	"""Return the path or shell target for app_key from paths.json or SYSTEM_APPS."""
+	key = app_key.lower()
+	paths_map = _read_paths_json()
+	if key in paths_map:
+		return paths_map[key]
+	try:
+		cands = _expand_candidates(SYSTEM_APPS.get(key, []))
 		for p in cands:
 			if os.path.isfile(p):
 				return p
@@ -52,19 +66,24 @@ def discover_app(app_key: str) -> Optional[str]:
 
 
 def open_app(app_key_or_path: str, args: Optional[List[str]] = None) -> bool:
-	"""Open an app by key in SYSTEM_APPS or by absolute path. Respects SIMULATION_MODE."""
+	"""Open an app by key or absolute path. Supports explorer shell: targets. Respects SIMULATION_MODE."""
 	try:
 		path = app_key_or_path
-		if not os.path.isabs(path):
+		if not os.path.isabs(path) and os.sep not in path and ":" not in path:
 			found = discover_app(app_key_or_path)
 			if not found:
 				logger.warning(f"App not found: {app_key_or_path}")
 				return False
 			path = found
-		cmd = [path] + (args or [])
+		cmd: List[str]
+		if path.lower().startswith("explorer.exe shell:appsfolder"):
+			cmd = ["explorer.exe", path.split(" ", 1)[1]]
+		else:
+			cmd = [path] + (args or [])
 		if is_simulation_mode():
 			logger.info(f"[SIMULATION] Would open app: {' '.join(cmd)}")
 			return True
+		logger.info(f"Opening app: {' '.join(cmd)}")
 		subprocess.Popen(cmd, shell=False)
 		return True
 	except Exception as e:
