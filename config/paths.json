@@ -1,10 +1,12 @@
 {
   "whatsapp": [
     "C:\\Users\\New Select Com\\AppData\\Local\\WhatsApp\\WhatsApp.exe",
+    "whatsapp": "explorer.exe shell:AppsFolder\\5319275A.WhatsAppDesktop_cv1g1gvanyjgm!App",
     "C:\\Program Files\\WhatsApp\\WhatsApp.exe",
     "C:\\Program Files (x86)\\WhatsApp\\WhatsApp.exe"
   ],
   "chrome": [
+      "chrome": "C:/Program Files/Google/Chrome/Application/chrome.exe"
     "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
     "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
     "C:\\Users\\New Select Com\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe"
