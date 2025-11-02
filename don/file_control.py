@@ -105,3 +105,48 @@ def summarize_text(text: str, max_len: int = 300) -> str:
 		return text[: max_len // 2] + " ... " + text[-max_len // 2 :]
 	except Exception:
 		return text
+
+
+def copy_file(src: str, dst: str) -> bool:
+	"""Copy a file from source to destination."""
+	try:
+		if is_simulation_mode():
+			logger.info(f"[SIMULATION] Would copy: {src} -> {dst}")
+			return True
+		os.makedirs(os.path.dirname(dst), exist_ok=True)
+		shutil.copy2(src, dst)
+		return True
+	except Exception as e:
+		logger.error(f"copy_file failed: {e}")
+		return False
+
+
+def get_file_info(path: str) -> dict:
+	"""Get file information."""
+	try:
+		stat = os.stat(path)
+		return {
+			"size": stat.st_size,
+			"modified": stat.st_mtime,
+			"created": stat.st_ctime,
+			"is_dir": os.path.isdir(path)
+		}
+	except Exception as e:
+		logger.error(f"get_file_info failed: {e}")
+		return {}
+
+
+def list_directory(path: str, recursive: bool = False) -> List[str]:
+	"""List directory contents."""
+	try:
+		if recursive:
+			files = []
+			for dirpath, dirnames, filenames in os.walk(path):
+				for filename in filenames:
+					files.append(os.path.join(dirpath, filename))
+			return files
+		else:
+			return os.listdir(path)
+	except Exception as e:
+		logger.error(f"list_directory failed: {e}")
+		return []

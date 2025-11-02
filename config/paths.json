@@ -11,6 +11,11 @@
   ],
   "edge": [
     "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
-    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\141.0.3537.99\\msedge.exe",
+    "C:\\Program Files (x86)\\Microsoft\\EdgeWebView\\Application\\141.0.3537.99\\msedgewebview2.exe"
+  ],
+  "vscode": [
+    "C:\\Users\\New Select Com\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
   ]
 }

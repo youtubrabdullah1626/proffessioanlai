@@ -9,6 +9,7 @@ from .safety import is_simulation_mode, require_confirmation
 from .tts import speak_mixed, init_tts
 from .whatsapp_desktop import launch_whatsapp
 from .whatsapp_web import build_chrome
+from .whatsapp_desktop_ocr import focus_whatsapp_window, ocr_region
 
 logger = setup_logging()
 
@@ -109,10 +110,35 @@ class WhatsAppAutomation:
 
 	def read_last(self, contact: str, n: int = 5) -> List[str]:
 		try:
+			# Try OCR fallback if needed
+			if self._ocr_fallback_needed():
+				return self._read_last_with_ocr(contact, n)
+				
 			# Stub: would read via UI automation or OCR fallback
 			logger.info(f"Read last {n} messages for {contact} (stub)")
 			return []
 		except Exception:
+			return []
+
+	def _ocr_fallback_needed(self) -> bool:
+		"""Determine if OCR fallback is needed."""
+		# This would check system conditions to determine if OCR is needed
+		# For now, we'll return False as a default
+		return False
+
+	def _read_last_with_ocr(self, contact: str, n: int = 5) -> List[str]:
+		"""Read last messages using OCR fallback."""
+		try:
+			if not focus_whatsapp_window():
+				logger.warning("Could not focus WhatsApp window for OCR")
+				return []
+				
+			# This would implement actual OCR reading
+			# For now, return empty list as placeholder
+			logger.info(f"Reading last {n} messages for {contact} using OCR fallback")
+			return []
+		except Exception as e:
+			logger.error(f"OCR reading failed: {e}")
 			return []
 
 	def summarize_chat_aloud(self, contact: str) -> bool:

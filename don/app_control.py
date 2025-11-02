@@ -154,3 +154,36 @@ def scan_missing_apps(required: Dict[str, List[str]]) -> Dict[str, bool]:
 		found = any(os.path.isfile(os.path.expandvars(p).replace("/", os.sep)) for p in cands)
 		out[key] = found
 	return out
+
+
+def kill_app_process(app_name: str, force: bool = False) -> bool:
+	"""Kill an application process with confirmation.
+	
+	Args:
+		app_name: Name of the application process to kill
+		force: Whether to force kill (dangerous operation)
+		
+	Returns:
+		bool: True if successful
+	"""
+	action = f"force kill process {app_name}" if force else f"terminate process {app_name}"
+	if not require_confirmation(action):
+		return False
+		
+	try:
+		terminated = False
+		for proc in psutil.process_iter(['pid', 'name']):
+			if proc.info['name'].lower() == app_name.lower():
+				if is_simulation_mode():
+					logger.info(f"[SIMULATION] Would {'force kill' if force else 'terminate'} {app_name} (PID: {proc.info['pid']})")
+					terminated = True
+				else:
+					if force:
+						proc.kill()
+					else:
+						proc.terminate()
+					terminated = True
+		return terminated
+	except Exception as e:
+		logger.error(f"kill_app_process failed: {e}")
+		return False

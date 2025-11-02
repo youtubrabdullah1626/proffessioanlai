@@ -1,1 +1,4 @@
-{"short_term": []}
+{
+  "self_check_test": "test_value",
+  "self_check_test_2": "test_value_2"
+}

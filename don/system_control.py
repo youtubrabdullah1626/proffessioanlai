@@ -139,6 +139,21 @@ def kill_process(pid: int) -> bool:
 		return False
 
 
+def force_kill_process(pid: int) -> bool:
+	"""Force kill a process (dangerous operation)."""
+	if not require_confirmation(f"force kill process {pid}"):
+		return False
+	try:
+		if is_simulation_mode():
+			logger.info(f"[SIMULATION] Would force kill PID {pid}")
+			return True
+		psutil.Process(pid).kill()
+		return True
+	except Exception as e:
+		logger.error(f"force_kill_process failed: {e}")
+		return False
+
+
 # Startup apps (basic listing and enable/disable placeholder)
 
 def list_startup_apps() -> List[str]:
@@ -209,3 +224,24 @@ def take_screenshot(path: str) -> bool:
 	except Exception as e:
 		logger.error(f"take_screenshot failed: {e}")
 		return False
+
+
+def get_battery_status() -> dict:
+	"""Get battery status information."""
+	try:
+		battery = psutil.sensors_battery()
+		if battery:
+			return {
+				"percent": battery.percent,
+				"secsleft": battery.secsleft,
+				"power_plugged": battery.power_plugged
+			}
+		return {"percent": 100, "secsleft": -1, "power_plugged": True}  # Desktop
+	except Exception as e:
+		logger.error(f"get_battery_status failed: {e}")
+		return {"percent": 100, "secsleft": -1, "power_plugged": True}
+
+
+def hibernate() -> bool:
+	"""Put the system into hibernation mode."""
+	return require_confirmation("hibernate system") and _run_cmd(["shutdown", "/h"])
